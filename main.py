@@ -4,7 +4,6 @@
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 import numpy as np
 import PIL.Image as im
-import re
 import sympy as sp
 import random
 
@@ -37,7 +36,7 @@ def make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, counter, colors):
     for i in range(nx):
         for j in range(ny):
             px[i, j] = colorize_point(newton_iter(grid[i, j], roots, ((xmax - xmin) / 100), f, df), roots, colors)
-    image.save("/Users/bbaptist/PycharmProjects/NewtonFractals/2k/2k" + str(counter) + ".png")
+    image.save("/Users/bbaptist/PycharmProjects/NewtonFractals/images/im" + str(counter) + ".png")
     print(counter)
 
 
@@ -55,38 +54,20 @@ def main():
     xmax = 2
     ymin = -2
     ymax = 2
-    ny = 2048
-    nx = 2048
-    counter = 46
+    ny = 1024
+    nx = 1024
+    counter = 1749
     rand = True
     while rand:
         roots = []
         colors = []
-        for i in range(random.randrange(3, 10)):
+        for i in range(random.randrange(5, 15)):
             roots.append(random.uniform(xmin, xmax) * 1j + random.uniform(xmin, xmax))
             colors.append((random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255)))
         f, df = roots_to_funcs(roots)
         counter += 1
         make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, counter, colors)
-    finder = re.compile(r"(-?\d+)[xy]")
-    roots = [1,1j+1,-1,]
-    colors = [(255,0,0),(0,255,0),(0,0,255)]
-    f, df = roots_to_funcs(roots)
-    counter +=1
-    make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, counter, colors)
-    while not rand:
-        result1 = re.findall(finder, input("top right corner"))
-        if len(result1) >= 2:
-            result2 = re.findall(finder, input("bottom left corner"))
-            if len(result2) >= 2:
-                xmin = int(result2[0]) * xmin / 100 * -1
-                ymin = int(result2[1]) * ymin / 100 * -1
-                xmax = int(result1[0]) * xmax / 100
-                ymax = int(result1[1]) * ymax / 100
-                counter +=1
-                make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, counter, colors)
 
 
-# \d(?:\D*)([+]\d+j)*
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
 main()
