@@ -8,7 +8,6 @@ import sympy as sp
 import random
 
 
-# Use a breakpoint in the code line below to debug your script.
 def gen_cplx_grid(xmin, xmax, nx, ymin, ymax, ny):
     xstep = np.linspace(xmin, xmax, nx)
     ystep = np.linspace(ymin, ymax, ny)
@@ -36,7 +35,7 @@ def make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, counter, colors):
     for i in range(nx):
         for j in range(ny):
             px[i, j] = colorize_point(newton_iter(grid[i, j], roots, ((xmax - xmin) / 100), f, df), roots, colors)
-    image.save("/Users/bbaptist/PycharmProjects/NewtonFractals/images/im" + str(counter) + ".png")
+    image.save("/Users/bbaptist/PycharmProjects/NewtonFractals/bg/im" + str(counter) + ".png")
     print(counter)
 
 
@@ -50,19 +49,19 @@ def roots_to_funcs(roots):
 
 
 def main():
-    xmin = -2
-    xmax = 2
-    ymin = -2
-    ymax = 2
-    ny = 1024
-    nx = 1024
-    counter = 1749
-    rand = True
-    while rand:
+    nx = 2560
+    ny = 1600
+    xmin = nx * -1
+    xmax = nx
+    ymin = ny * -1
+    ymax = ny
+    counter = 43
+    while True:
         roots = []
         colors = []
-        for i in range(random.randrange(5, 15)):
-            roots.append(random.uniform(xmin, xmax) * 1j + random.uniform(xmin, xmax))
+        #colors = [(254, 67, 101), (252, 157, 154), (249, 205, 173), (200, 200, 169), (131, 175, 155)]
+        for i in range(random.randrange(4,7)):
+            roots.append(random.uniform(ymin, ymax) * 1j + random.uniform(xmin, xmax))
             colors.append((random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255)))
         f, df = roots_to_funcs(roots)
         counter += 1
