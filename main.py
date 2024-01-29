@@ -5,6 +5,7 @@ import random
 import os
 import time
 
+
 def gen_cplx_grid(xmin, xmax, nx, ymin, ymax, ny):
     xstep = np.linspace(xmin, xmax, nx)
     ystep = np.linspace(ymin, ymax, ny)
@@ -32,7 +33,7 @@ def min_index(temp):
     return temp.index(min(temp))
 
 
-def make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, counter, colors, path):
+def make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, counter, colors, path, start_time):
     grid = gen_cplx_grid(xmin, xmax, nx, ymin, ymax, ny)
     image = im.new("RGB", (nx, ny))
     px = image.load()
@@ -40,6 +41,8 @@ def make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, counter, colors, path)
         for j in range(ny):
             px[i, j] = colorize_point(newton_iter(grid[i, j], roots, ((xmax - xmin) / 100), f, df), roots, colors)
     image.save(path + "/im" + str(counter) + ".png")
+    print("made image ", counter, " in ", round(time.time() - start_time, 5), "s", sep="")
+    return
 
 
 def roots_to_funcs(roots):
@@ -52,14 +55,14 @@ def roots_to_funcs(roots):
 
 
 def main():
-    nx = 4096
-    ny = 4096
+    nx = 1024
+    ny = 1024
     xmin = nx * -1
     xmax = nx
     ymin = ny * -1
     ymax = ny
     rand = True
-    path = "/Users/bbaptist/PycharmProjects/NewtonFractals/4k"
+    path = "/Users/bbaptist/PycharmProjects/NewtonFractals/images"
     files = list(map(lambda name: int(name[2:-4]), os.listdir(path)))
     if files:
         counter = max(files)
@@ -67,7 +70,6 @@ def main():
         counter = 0
 
     while rand:
-        start = time.time()
         roots = []
         colors = []
         for i in range(random.randrange(4, 7)):
@@ -75,15 +77,13 @@ def main():
             colors.append((random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255)))
         f, df = roots_to_funcs(roots)
         counter += 1
-        make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, counter, colors, path)
-        end = time.time()
-        print("im num:", counter,"time:",end-start)
+        make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, counter, colors, path, time.time())
     if not rand:
         # colors = [(254, 67, 101), (252, 157, 154), (249, 205, 173), (200, 200, 169), (131, 175, 155)]
         colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
         roots = [256, -256, 256j]
         f, df = roots_to_funcs(roots)
-        make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, 0, colors, path)
+        make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, 0, colors, path, time.time())
 
 
 main()
