@@ -3,7 +3,7 @@ import PIL.Image as im
 import sympy as sp
 import random
 import os
-
+import time
 
 def gen_cplx_grid(xmin, xmax, nx, ymin, ymax, ny):
     xstep = np.linspace(xmin, xmax, nx)
@@ -40,7 +40,6 @@ def make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, counter, colors, path)
         for j in range(ny):
             px[i, j] = colorize_point(newton_iter(grid[i, j], roots, ((xmax - xmin) / 100), f, df), roots, colors)
     image.save(path + "/im" + str(counter) + ".png")
-    print(counter)
 
 
 def roots_to_funcs(roots):
@@ -66,8 +65,9 @@ def main():
         counter = max(files)
     else:
         counter = 0
-    print("working on:", counter)
+
     while rand:
+        start = time.time()
         roots = []
         colors = []
         for i in range(random.randrange(4, 7)):
@@ -76,6 +76,8 @@ def main():
         f, df = roots_to_funcs(roots)
         counter += 1
         make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, counter, colors, path)
+        end = time.time()
+        print("im num:", counter,"time:",end-start)
     if not rand:
         # colors = [(254, 67, 101), (252, 157, 154), (249, 205, 173), (200, 200, 169), (131, 175, 155)]
         colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
