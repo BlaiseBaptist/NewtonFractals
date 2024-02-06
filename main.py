@@ -41,8 +41,10 @@ def make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, counter, colors, path,
         for j in range(ny):
             px[i, j] = colorize_point(newton_iter(grid[i, j], roots, ((xmax - xmin) / 100), f, df), roots, colors)
     image.save(path + "/im" + str(counter) + ".png")
-    print("made image ", counter, " in ", round(time.time() - start_time, 5), "s", sep="")
-    return
+    run_time = time.time() - start_time
+    px_time = (run_time * 1000000) / (ny * nx)
+    return "made image " + str(counter) + " in " + str(round(run_time, 5)) + "s " + str(
+        round(px_time, 5)) + "us per pixel"
 
 
 def roots_to_funcs(roots):
@@ -77,13 +79,13 @@ def main():
             colors.append((random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255)))
         f, df = roots_to_funcs(roots)
         counter += 1
-        make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, counter, colors, path, time.time())
+        print(make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, counter, colors, path, time.time()))
     if not rand:
         # colors = [(254, 67, 101), (252, 157, 154), (249, 205, 173), (200, 200, 169), (131, 175, 155)]
         colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
         roots = [256, -256, 256j]
         f, df = roots_to_funcs(roots)
-        make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, 0, colors, path, time.time())
+        print(make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, 0, colors, path, time.time()))
 
 
 main()
