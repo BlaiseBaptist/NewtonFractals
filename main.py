@@ -57,24 +57,23 @@ def roots_to_funcs(roots):
 
 
 def main():
-    nx = 1024
-    ny = 1024
+    nx = 512
+    ny = 512
     xmin = nx * -1
     xmax = nx
     ymin = ny * -1
     ymax = ny
     rand = True
-    path = "/Users/bbaptist/PycharmProjects/NewtonFractals/images"
+    path = "/Users/bbaptist/PycharmProjects/newton_fractals/512"
     files = list(map(lambda name: int(name[2:-4]), os.listdir(path)))
     if files:
         counter = max(files)
     else:
         counter = 0
-
     while rand:
         roots = []
         colors = []
-        for i in range(random.randrange(4, 7)):
+        for i in range(random.randrange(10, 25)):
             roots.append(random.uniform(ymin, ymax) * 1j + random.uniform(xmin, xmax))
             colors.append((random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255)))
         f, df = roots_to_funcs(roots)
