@@ -57,14 +57,12 @@ def roots_to_funcs(roots):
 
 
 def main():
-    nx = 512
-    ny = 512
-    xmin = nx * -1
-    xmax = nx
-    ymin = ny * -1
-    ymax = ny
+    nx = 200
+    ny = 200
+    xmin, xmax = nx * -1, nx
+    ymin, ymax = ny * -1, ny
     rand = True
-    path = "/Users/bbaptist/PycharmProjects/newton_fractals/512"
+    path = "/Users/bbaptist/PycharmProjects/newton_fractals/tests"
     files = list(map(lambda name: int(name[2:-4]), os.listdir(path)))
     if files:
         counter = max(files)
@@ -73,12 +71,22 @@ def main():
     while rand:
         roots = []
         colors = []
-        for i in range(random.randrange(10, 25)):
+        for i in range(random.randrange(4, 5)):
             roots.append(random.uniform(ymin, ymax) * 1j + random.uniform(xmin, xmax))
             colors.append((random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255)))
+        roots = [-1.0,-2.0,-3.0]
+        colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
+        print(roots)
+        xmax, ymax = 10.0, 10.0
+        xmin, ymin = -10.0, -10.0
         f, df = roots_to_funcs(roots)
         counter += 1
         print(make_im(xmin, xmax, nx, ymin, ymax, ny, roots, f, df, counter, colors, path, time.time()))
+        f1 = f(1.0+1.0j)
+        df1 = df(1.0+1.0j)
+        print(f1,df1,f1/df1)
+        print((1+1j)/(1+1j))
+        return True
     if not rand:
         # colors = [(254, 67, 101), (252, 157, 154), (249, 205, 173), (200, 200, 169), (131, 175, 155)]
         colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
